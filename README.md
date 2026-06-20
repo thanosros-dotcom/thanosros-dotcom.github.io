@@ -1,344 +1,341 @@
 <!DOCTYPE html>
 <html lang="el">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Weight Tracker</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Για την Αλκμήνη!</title>
+    <style>
+        :root {
+            --primary-color: #ff4d6d;
+            --secondary-color: #ff85a2;
+            --bg-color: #fff0f3;
+            --text-color: #590d22;
+        }
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
 
-<style>
-body{
-    font-family: Arial,sans-serif;
-    max-width:1000px;
-    margin:auto;
-    padding:20px;
-    background:#f5f5f5;
-}
+        /* Banner */
+        .marquee-banner {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 0;
+            font-size: 1.2rem;
+            font-weight: bold;
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
 
-.card{
-    background:white;
-    padding:20px;
-    border-radius:10px;
-    margin-bottom:20px;
-    box-shadow:0 2px 5px rgba(0,0,0,0.1);
-}
+        .marquee-text {
+            display: inline-block;
+            animation: marquee 15s linear infinite;
+        }
 
-input,button{
-    padding:10px;
-    margin:5px;
-}
+        @keyframes marquee {
+            0% { transform: translate3d(100%, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
 
-button{
-    cursor:pointer;
-}
+        /* Main Container */
+        .container {
+            max-width: 600px;
+            width: 90%;
+            margin: 30px auto;
+            text-align: center;
+        }
 
-table{
-    width:100%;
-    border-collapse:collapse;
-}
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: heartbeat 1.5s infinite;
+        }
 
-th,td{
-    border:1px solid #ddd;
-    padding:8px;
-}
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            20% { transform: scale(1.05); }
+            40% { transform: scale(1); }
+            60% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
 
-th{
-    background:#eee;
-}
+        /* Card Style for Sections */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: 0 8px 16px rgba(255, 77, 109, 0.15);
+            transition: transform 0.3s;
+        }
 
-.stats{
-    display:flex;
-    gap:20px;
-    flex-wrap:wrap;
-}
+        .card:hover {
+            transform: translateY(-5px);
+        }
 
-.stat{
-    background:#fafafa;
-    padding:15px;
-    border-radius:8px;
-    min-width:180px;
-}
-</style>
+        /* Buttons */
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+        }
+
+        .btn:hover {
+            background-color: #ff758f;
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Compliment Box */
+        #compliment-display {
+            font-size: 1.3rem;
+            font-style: italic;
+            margin-top: 15px;
+            min-height: 50px;
+            color: #800f2f;
+            font-weight: 600;
+        }
+
+        /* Quiz Choices */
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .quiz-btn {
+            background: #fff0f3;
+            border: 2px solid var(--secondary-color);
+            color: var(--text-color);
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .quiz-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Slider / Meter */
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 15px;
+            border-radius: 10px;
+            background: #ffe3e8;
+            outline: none;
+            margin: 20px 0;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        #meter-result {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* Catch me Section */
+        .catch-container {
+            position: relative;
+            height: 120px;
+            margin-top: 20px;
+        }
+
+        #run-btn {
+            position: absolute;
+            left: 10%;
+            transition: all 0.1s ease;
+        }
+
+        #stay-btn {
+            position: absolute;
+            right: 10%;
+        }
+
+        /* Floating Hearts */
+        .heart {
+            position: fixed;
+            font-size: 24px;
+            color: var(--primary-color);
+            pointer-events: none;
+            z-index: 999;
+            animation: floatUp 2s linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+        }
+    </style>
 </head>
 <body>
 
-<h1>📉 Weight Tracker</h1>
-
-<div class="card">
-
-    <h3>Νέα Καταγραφή</h3>
-
-    <input type="date" id="date">
-
-    <input
-        type="number"
-        id="weight"
-        step="0.1"
-        placeholder="Βάρος (kg)"
-    >
-
-    <button onclick="addEntry()">Καταχώρηση</button>
-
-</div>
-
-<div class="card">
-
-    <div class="stats">
-
-        <div class="stat">
-            <b>Τρέχον Βάρος</b>
-            <div id="currentWeight">-</div>
+    <div class="marquee-banner">
+        <div class="marquee-text">
+            ✨ ΕΚΤΑΚΤΟ ΑΝΑΚΟΙΝΩΘΕΝ: Η ΑΛΚΜΗΝΗ ΕΙΝΑΙ ΠΑΝΕΜΟΡΦΗ! ✨ ΠΑΓΚΟΣΜΙΑ ΔΙΑΠΙΣΤΩΣΗ ✨ ΚΑΝΕΙΣ ΔΕΝ ΜΠΟΡΕΙ ΝΑ ΤΟ ΑΡΝΗΘΕΙ ✨
         </div>
-
-        <div class="stat">
-            <b>7ήμερη Μεταβολή</b>
-            <div id="weeklyChange">-</div>
-        </div>
-
-        <div class="stat">
-            <b>Πρόβλεψη 30 ημερών</b>
-            <div id="prediction">-</div>
-        </div>
-
     </div>
 
-</div>
+    <div class="container">
+        <h1>Αλκμήνη, είσαι πανέμορφη! ❤️</h1>
+        <p>Αυτό το app φτιάχτηκε αποκλειστικά για να σου θυμίζει την αλήθεια.</p>
 
-<div class="card">
-    <canvas id="chart"></canvas>
-</div>
+        <div class="card">
+            <h3>✨ Η Γεννήτρια της Αλήθειας</h3>
+            <p>Χρειάζεσαι μια δόση αντικειμενικότητας; Πάτα το κουμπί!</p>
+            <button class="btn" onclick="generateCompliment(event)">Πάτα με!</button>
+            <div id="compliment-display">Κάνε κλικ για να ξεκινήσεις...</div>
+        </div>
 
-<div class="card">
+        <div class="card">
+            <h3>❓ Το Αντικειμενικό Κουίζ</h3>
+            <p>Ποιο είναι το κυριότερο χαρακτηριστικό της Αλκμήνης;</p>
+            <div class="quiz-options">
+                <button class="quiz-btn" onclick="quizAnswer(false)">Α) Είναι απλά χαριτωμένη.</button>
+                <button class="quiz-btn" onclick="quizAnswer(true)">Β) Η ομορφιά της μάλλον θα έπρεπε να είναι παράνομη, κλέβει τις εντυπώσεις!</button>
+                <button class="quiz-btn" onclick="quizAnswer(false)">Γ) Έχει ωραίο στυλ, αλλά ως εκεί.</button>
+            </div>
+            <div id="quiz-feedback" style="margin-top:15px; font-weight:bold;"></div>
+        </div>
 
-    <h3>Καταγραφές</h3>
+        <div class="card">
+            <h3>📊 Ομορφόμετρο</h3>
+            <p>Σύρε τη μπάρα για να μετρήσουμε το επίπεδο ομορφιάς σου σήμερα:</p>
+            <input type="range" min="1" max="5" value="1" class="slider" id="beauty-slider" oninput="updateMeter(this.value)">
+            <div id="meter-result">Φόρτωση...</div>
+        </div>
 
-    <table>
+        <div class="card">
+            <h3>🤔 Ώρα για ειλικρίνεια</h3>
+            <p>Διάλεξε τι από τα δύο ισχύει:</p>
+            <div class="catch-container">
+                <button class="btn" id="run-btn" onmouseover="runAway()" onclick="runAway()">Είμαι μια απλή θνητή 🤷‍♀️</button>
+                <button class="btn" id="stay-btn" onclick="celebrate(event)">Είμαι Θεά! 👑</button>
+            </div>
+        </div>
+    </div>
 
-        <thead>
-            <tr>
-                <th>Ημερομηνία</th>
-                <th>Βάρος</th>
-                <th></th>
-            </tr>
-        </thead>
+    <script>
+        // Compliments Array
+        const compliments = [
+            "Το χαμόγελό σου φωτίζει περισσότερο κι από τον ήλιο! ☀️",
+            "Αν η ομορφιά ήταν χρόνος, θα ήσουν η αιωνιότητα. ⏳",
+            "Δεν είσαι απλά όμορφη, είσαι η προσωποποίηση της κομψότητας! ✨",
+            "Τα μάτια σου έχουν δικό τους μαγνητισμό, δεν υπάρχει άλλη εξήγηση. 👀💖",
+            "Ακόμα και οι πιο όμορφες φωτογραφίες αδικούν την πραγματική σου γοητεία! 📸",
+            "Η παρουσία σου και μόνο ομορφαίνει τον χώρο γύρω σου σε δευτερόλεπτα! 🌸",
+            "Είσαι ο λόγος που η λέξη 'πανέμορφη' απέκτησε νόημα! 😍"
+        ];
 
-        <tbody id="entriesTable"></tbody>
-
-    </table>
-
-</div>
-
-<script>
-
-let chart;
-
-function getEntries(){
-    return JSON.parse(localStorage.getItem("weights") || "[]");
-}
-
-function saveEntries(entries){
-    localStorage.setItem("weights", JSON.stringify(entries));
-}
-
-function addEntry(){
-
-    const date=document.getElementById("date").value;
-    const weight=parseFloat(document.getElementById("weight").value);
-
-    if(!date || !weight){
-        alert("Συμπλήρωσε ημερομηνία και βάρος");
-        return;
-    }
-
-    const entries=getEntries();
-
-    entries.push({
-        date,
-        weight
-    });
-
-    entries.sort((a,b)=>
-        new Date(a.date)-new Date(b.date)
-    );
-
-    saveEntries(entries);
-
-    document.getElementById("weight").value="";
-
-    render();
-}
-
-function deleteEntry(index){
-
-    const entries=getEntries();
-
-    entries.splice(index,1);
-
-    saveEntries(entries);
-
-    render();
-}
-
-function linearRegression(y){
-
-    const n=y.length;
-
-    let xSum=0;
-    let ySum=0;
-    let xySum=0;
-    let xxSum=0;
-
-    for(let i=0;i<n;i++){
-
-        xSum+=i;
-        ySum+=y[i];
-        xySum+=i*y[i];
-        xxSum+=i*i;
-
-    }
-
-    const slope=
-        (n*xySum - xSum*ySum) /
-        (n*xxSum - xSum*xSum);
-
-    const intercept=
-        (ySum - slope*xSum)/n;
-
-    return {slope,intercept};
-}
-
-function render(){
-
-    const entries=getEntries();
-
-    const tbody=document.getElementById("entriesTable");
-
-    tbody.innerHTML="";
-
-    entries.forEach((e,index)=>{
-
-        tbody.innerHTML+=`
-        <tr>
-            <td>${e.date}</td>
-            <td>${e.weight}</td>
-            <td>
-                <button onclick="deleteEntry(${index})">
-                Διαγραφή
-                </button>
-            </td>
-        </tr>
-        `;
-    });
-
-    if(entries.length===0){
-        return;
-    }
-
-    const labels=entries.map(x=>x.date);
-
-    const weights=entries.map(x=>x.weight);
-
-    document.getElementById("currentWeight").innerText=
-        weights[weights.length-1].toFixed(1)+" kg";
-
-    if(weights.length>=2){
-
-        const last=weights[weights.length-1];
-
-        let weekAgo=weights[0];
-
-        if(weights.length>=7){
-            weekAgo=weights[weights.length-7];
+        function generateCompliment(e) {
+            const randomIndex = Math.floor(Math.random() * compliments.length);
+            document.getElementById('compliment-display').innerText = compliments[randomIndex];
+            createHearts(e.clientX, e.clientY);
         }
 
-        const diff=last-weekAgo;
-
-        document.getElementById("weeklyChange").innerText=
-            diff.toFixed(1)+" kg";
-
-    }
-
-    const regression=linearRegression(weights);
-
-    const trend=[];
-
-    for(let i=0;i<weights.length;i++){
-
-        trend.push(
-            regression.intercept +
-            regression.slope*i
-        );
-
-    }
-
-    const futureLabels=[...labels];
-
-    const forecast=[];
-
-    for(let i=0;i<30;i++){
-
-        const idx=weights.length+i;
-
-        forecast.push(
-            regression.intercept +
-            regression.slope*idx
-        );
-
-        futureLabels.push(
-            "Day +"+(i+1)
-        );
-    }
-
-    const predictedWeight=
-        forecast[forecast.length-1];
-
-    document.getElementById("prediction").innerText=
-        predictedWeight.toFixed(1)+" kg";
-
-    if(chart){
-        chart.destroy();
-    }
-
-    chart=new Chart(
-        document.getElementById("chart"),
-        {
-            type:"line",
-            data:{
-                labels:futureLabels,
-                datasets:[
-                    {
-                        label:"Βάρος",
-                        data:[
-                            ...weights,
-                            ...Array(30).fill(null)
-                        ],
-                        borderWidth:2
-                    },
-                    {
-                        label:"Trend",
-                        data:[
-                            ...trend,
-                            ...forecast
-                        ],
-                        borderDash:[5,5],
-                        borderWidth:2
-                    }
-                ]
-            },
-            options:{
-                responsive:true
+        function quizAnswer(isCorrect) {
+            const feedback = document.getElementById('quiz-feedback');
+            if(isCorrect) {
+                feedback.innerHTML = "Σωστά! Η επιστήμη και η αισθητική συμφωνούν απόλυτα! 🏆🎉";
+                feedback.style.color = "green";
+            } else {
+                feedback.innerHTML = "Λάθος απάντηση! Ξαναπροσπάθησε, το σύστημα δεν δέχεται ψέματα. ❌😜";
+                feedback.style.color = "var(--primary-color)";
             }
         }
-    );
-}
 
-document.getElementById("date").value =
-    new Date().toISOString().split("T")[0];
+        function updateMeter(val) {
+            const result = document.getElementById('meter-result');
+            const stages = {
+                1: "Πανέμορφη 😍",
+                2: "Εκθαμβωτική ✨",
+                3: "Ακαταμάχητη 💖",
+                4: "Έκπτωτος Άγγελος 👼",
+                5: "👑 ΑΛΚΜΗΝΗ (Εκτός κλίμακας, κάηκε το σύστημα!) 🔥"
+            };
+            result.innerText = stages[val];
+            
+            if(val == 5) {
+                // Trigger a burst of random hearts
+                for(let i=0; i<15; i++) {
+                    setTimeout(() => {
+                        createHearts(Math.random() * window.innerWidth, Math.random() * window.innerHeight);
+                    }, i * 100);
+                }
+            }
+        }
 
-render();
+        // Initialize meter
+        updateMeter(1);
 
-</script>
+        // Runaway Button Logic
+        function runAway() {
+            const btn = document.getElementById('run-btn');
+            // Move inside the container boundaries safely
+            const newX = Math.random() * 60; // percentage
+            const newY = Math.random() * 50; // pixels
+            
+            btn.style.left = newX + '%';
+            btn.style.top = newY + 'px';
+        }
 
+        function celebrate(e) {
+            alert("ΕΤΣΙ ΜΠΡΑΒΟ! Η αυτογνωσία είναι μεγάλη αρετή! 👑❤️");
+            createHearts(e.clientX, e.clientY);
+        }
+
+        // Floating Hearts Effect
+        function createHearts(x, y) {
+            const heartCount = 6;
+            for(let i=0; i<heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerText = '❤️';
+                heart.style.left = (x ? x : window.innerWidth/2) + (Math.random() * 40 - 20) + 'px';
+                heart.style.top = (y ? y : window.innerHeight/2) + (Math.random() * 40 - 20) + 'px';
+                heart.style.animationDelay = (Math.random() * 0.3) + 's';
+                document.body.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 2000);
+            }
+        }
+    </script>
 </body>
 </html>
